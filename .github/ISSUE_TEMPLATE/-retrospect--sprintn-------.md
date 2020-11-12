@@ -1,7 +1,7 @@
 ---
 name: "[Retrospect] sprintN/기능명-이름"
 about: 회고 이슈 작성시 사용되는 템플릿 입니다.
-title: ''
+title: "[Retrospect] 작업파트랑 이름을 작성해 주세요."
 labels: ''
 assignees: ''
 
