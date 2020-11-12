@@ -1,20 +1,10 @@
 "use strict";
-const { Model } = require("sequelize");
+
+const crypto = require("crypto");
 
 module.exports = (sequelize, DataTypes) => {
-  class users extends Model {
-    static associate(models) {
-      models.users.hasMany(models.comments, {
-        foreignKey: "userid",
-        sourceKey: "id",
-      });
-      models.users.hasMany(models.posts, {
-        foreignKey: "userid",
-        sourceKey: "id",
-      });
-    }
-  }
-  users.init(
+  const users = sequelize.define(
+    "users",
     {
       email: DataTypes.STRING,
       password: DataTypes.STRING,
@@ -26,9 +16,31 @@ module.exports = (sequelize, DataTypes) => {
       petinfo: DataTypes.STRING,
     },
     {
-      sequelize,
-      modelName: "users",
+      hooks: {
+        beforeCreate: (data, option) => {
+          const shasum = crypto.createHmac("sha512", "mysecretkey");
+          shasum.update(data.password);
+          data.password = shasum.digest("hex");
+        },
+        beforeFind: (data, option) => {
+          if (data.where.password) {
+            const shasum = crypto.createHmac("sha512", "mysecretkey");
+            shasum.update(data.where.password);
+            data.where.password = shasum.digest("hex");
+          }
+        },
+      },
     }
   );
+  users.associate = function (models) {
+    models.users.hasMany(models.comments, {
+      foreignKey: "userid",
+      sourceKey: "id",
+    });
+    models.users.hasMany(models.posts, {
+      foreignKey: "userid",
+      sourceKey: "id",
+    });
+  };
   return users;
 };
