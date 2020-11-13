@@ -23,8 +23,8 @@ const port = 8001;
  */
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
-    methods: ["GET", "POST"],
+    origin: ["http://localhost:8001"],
+    methods: ["GET", "POST", "PUT"],
     credentials: true,
   })
 );
@@ -66,11 +66,15 @@ app.use(express.urlencoded({ extended: false }));
 
 //클라이언트랑 연결
 app.use(express.static(__dirname + "/public"));
-app.get("/", function (req, res) {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
+// app.get("/", function (req, res) {
+//   res.sendFile(path.join(__dirname, "public", "index.html"));
+// });
 
 //라우터 실행
+app.get("/", async (req, res) => {
+  const postAll = await posts.findAll();
+  res.status(200).json(postAll);
+});
 app.use("/user", usersRouter);
 app.use("/post", postsRouter);
 app.use("/oauth", oauthsRouter);
