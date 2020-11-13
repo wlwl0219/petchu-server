@@ -8,21 +8,21 @@ module.exports = {
       users
         .findOne({
           where: {
-            id: sess.userid
-          }
+            id: sess.userid,
+          },
         })
-        .then(result => {
+        .then((result) => {
           if (result) {
             res.status(200).json(result);
           } else {
-            res.sendStatus(204); //이부분 깃북에 추가하기
+            res.status(204).send("데이터베이스에 회원정보가 없습니다");
           }
         })
-        .catch(err => {
+        .catch((err) => {
           res.status(500).send(err);
         });
     } else {
-      res.status(401).send('존재하지 않은 유저입니다.')//깃북에 수정
+      res.status(401).send("존재하지 않은 유저입니다.");
     }
-  }
+  },
 };
