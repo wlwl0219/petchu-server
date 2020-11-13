@@ -6,27 +6,26 @@ module.exports = {
     users
       .findOrCreate({
         where: {
-          email: email
+          email: email,
         },
         defaults: {
           password: password,
           username: username,
-          nickname: nickname
-        }
+          nickname: nickname,
+        },
       })
       .then(([user, created]) => {
         if (!created) {
           return res.status(409).send("email exists");
         } else {
-          return res.status(200).send('success signup');
+          return res.status(201).send("success signup");
         }
-      }).catch(err => {
+      })
+      .catch((err) => {
         res.status(500).send(err);
       });
-  }
+  },
 };
-
-
 
 // if (!created) {
 //   return res.status(409).send('email exists');

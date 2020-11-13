@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/codestates/im23project9-server#readme",
   "dependencies": {
+    "axios": "^0.21.0",
     "config": "^3.3.2",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",

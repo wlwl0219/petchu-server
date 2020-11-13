@@ -2,14 +2,15 @@ const express = require("express");
 const path = require("path");
 
 //라우터 추가
-const usersRouter = require('./routes/users');
-const postsRouter = require('./routes/posts');
+const usersRouter = require("./routes/users");
+const postsRouter = require("./routes/posts");
+const oauthsRouter = require("./routes/oauths");
 
 //미들웨어 추가
-const cors = require('cors');
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
-const morgan = require('morgan');
+const cors = require("cors");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const morgan = require("morgan");
 
 //서버 추가
 const app = express();
@@ -22,9 +23,9 @@ const port = 8001;
  */
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
-    methods: ['GET', 'POST'],
-    credentials: true
+    origin: ["http://localhost:3000"],
+    methods: ["GET", "POST"],
+    credentials: true,
   })
 );
 
@@ -36,9 +37,9 @@ app.use(
  */
 app.use(
   session({
-    secret: '@codestates',
+    secret: "@codestates",
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
   })
 );
 
@@ -48,9 +49,9 @@ app.use(
 app.use(cookieParser());
 
 /*
- * POSTMAN을 통한 test에 필요할지도 모릅니다. logging을 활용하세요. 
+ * POSTMAN을 통한 test에 필요할지도 모릅니다. logging을 활용하세요.
  */
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 
 /*
  * express.json() - body로 넘어온 데이터를 JSON 객체로 변환
@@ -69,9 +70,10 @@ app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-//라우터 실행 
-app.use('/user', usersRouter);
-app.use('/post', postsRouter);
+//라우터 실행
+app.use("/user", usersRouter);
+app.use("/post", postsRouter);
+app.use("/oauth", oauthsRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
