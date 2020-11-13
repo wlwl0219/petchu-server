@@ -3,4 +3,5 @@ module.exports = {
   writeUp: require("./writeup"),
   writeInfo: require("./writeinfo"),
   writeEdit: require("./writeedit"),
+  writeIn: require("./writein"),
 };
