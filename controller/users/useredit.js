@@ -32,18 +32,18 @@ module.exports = {
         )
         .then((result) => {
           if (result) {
-            res.status(200).json(result);
+            return res.status(200).json(result);
           } else {
-            res
+            return res
               .status(204)
               .send("데이터베이스에 회원정보를 업데이트 하지 못했습니다.");
           }
         })
         .catch((err) => {
-          res.status(500).send(err);
+          return res.status(500).send(err);
         });
     } else {
-      res.status(401).send("존재하지 않은 유저입니다.");
+      return res.status(401).send("존재하지 않은 유저입니다.");
     }
   },
 };
