@@ -12,7 +12,7 @@ module.exports = {
         }
       }).then(result => {
         if (result === null) {
-          res.status(404).send('invalid user"');
+          res.status(404).send('invalid user');
         } else {
           sess.userid = result.id;
           res.status(200).json({

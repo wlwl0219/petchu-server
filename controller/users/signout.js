@@ -14,7 +14,7 @@ module.exports = {
         }
       });
     } else {
-      res.status(404).send('you re currently not logined')
+      res.status(404).send('you are currently not logined')
       res.redirect('/');
     }
   }
