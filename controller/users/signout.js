@@ -13,7 +13,7 @@ module.exports = {
         }
       });
     } else {
-      return res.status(404).send("you're currently not logined");
+      return res.status(404).send('you are currently not logined');
     }
   },
 };

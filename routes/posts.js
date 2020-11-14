@@ -10,9 +10,8 @@ router.post("/writeout/:id", postsController.writeOut.post);
 router.put("/writeedit/:id", postsController.writeEdit.put);
 router.get("/writelist", postsController.writeList.get);
 
-router.post("/commentout", commentsController.commentOut.post);
-router.post("/commentup", commentsController.commentUp.post);
-router.get("/commentinfo", commentsController.commentInfo.get);
-router.post("/commentedit", commentsController.commentEdit.post);
+router.post('/commentout/:id', commentsController.commentOut.post);
+router.post('/commentup/:id', commentsController.commentUp.post);
+router.put('/commentedit/:id', commentsController.commentEdit.put);
 
 module.exports = router;
