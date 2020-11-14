@@ -1,4 +1,5 @@
 const express = require("express");
+const { posts } = require("./models");
 const path = require("path");
 
 //라우터 추가
