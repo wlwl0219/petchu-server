@@ -7,14 +7,18 @@ module.exports = {
     let id = req.params.id;
 
     if (sess.userid) {
-      const commentCreated = await comments.create({ content: content, postid: id, userid: sess.userid })
+      const commentCreated = await comments.create({
+        content: content,
+        postid: id,
+        userid: sess.userid,
+      });
       if (commentCreated) {
-        return res.status(200).json(commentCreated)
+        return res.status(200).json(commentCreated);
       } else {
-        return res.status(409).send("fail")
+        return res.status(400).send("fail");
       }
     } else {
       return res.status(404).send("you are currently not logined");
     }
-  }
+  },
 };

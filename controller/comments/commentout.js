@@ -6,15 +6,17 @@ module.exports = {
     const sess = req.session;
 
     if (sess.userid) {
-      const commentFind = await comments.findOne({ where: { id: id, userid: sess.userid } });
+      const commentFind = await comments.findOne({
+        where: { id: id, userid: sess.userid },
+      });
       if (commentFind) {
         await comments.destroy({ where: { id: id } });
         return res.status(205).send("삭제 성공");
       } else {
-        return res.status(404).send("댓글을 삭제 할 수 없습니다.");
+        return res.status(400).send("댓글을 삭제 할 수 없습니다.");
       }
     } else {
       return res.status(404).send("you are currently not logined");
     }
-  }
+  },
 };
