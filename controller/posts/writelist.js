@@ -11,7 +11,7 @@ module.exports = {
         return res.status(200).json(postAllUser);
       }
     } else {
-      return res.status(404).send("게시물을 찾을 수 없습니다.");
+      return res.status(404).send("fail");
     }
   },
 };

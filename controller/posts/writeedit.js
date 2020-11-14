@@ -16,7 +16,7 @@ module.exports = {
       if (postEdit) {
         return res.status(200).json(postEdit);
       } else {
-        return res.status(204).send("존재하지 않은 게시물입니다.");
+        return res.status(404).send("수정할 게시물을 찾지 못했습니다.");
       }
     } else {
       return res.status(401).send("fail");
