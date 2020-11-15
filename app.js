@@ -1,5 +1,5 @@
 const express = require("express");
-const { posts } = require("./models");
+const { posts, users } = require("./models");
 const path = require("path");
 
 //라우터 추가
@@ -72,10 +72,31 @@ app.use(express.static(__dirname + "/public"));
 // });
 
 //라우터 실행
-app.get("/", async (req, res) => {
-  const postAll = await posts.findAll();
-  res.status(200).json(postAll);
+app.get("/main", async (req, res) => {
+  // posts테이블의 userid칼럼(저자)으로 이미 users테이블과 연결되어 있음 > 저자의 기본정보만 가져옴
+  const postAll = await posts.findAll({
+    include: [
+      {
+        model: users,
+        attributes: ["id", "email", "username", "nickname", "icon", "userinfo"],
+      },
+    ],
+  });
+  const sess = req.session;
+
+  if (sess.userid) {
+    // 로그인이 되어 있다면 세션으로 유저의 기본정보와 모든 포스트와 정보를 보내줌
+    const userMain = await users.findOne({
+      attributes: ["id", "email", "username", "nickname", "icon", "userinfo"],
+      where: { id: sess.userid },
+    });
+    res.status(204).json({ userData: userMain, postData: postAll });
+  } else {
+    // 로그인이 안되어 있다면 모든 포스트 정보만 보내줌
+    res.status(200).json(postAll);
+  }
 });
+
 app.use("/user", usersRouter);
 app.use("/post", postsRouter);
 app.use("/oauth", oauthsRouter);
