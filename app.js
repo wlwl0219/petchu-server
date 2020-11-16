@@ -72,28 +72,20 @@ app.use(express.static(__dirname + "/public"));
 // });
 
 //라우터 실행
-app.get("/main", async (req, res) => {
-  // posts테이블의 userid칼럼(저자)으로 이미 users테이블과 연결되어 있음 > 저자의 기본정보만 가져옴
-  const postAll = await posts.findAll({
-    include: [
-      {
-        model: users,
-        attributes: ["id", "email", "username", "nickname", "icon", "userinfo"],
-      },
-    ],
-  });
+app.get("/", async (req, res) => {
   const sess = req.session;
-
-  if (sess.userid) {
-    // 로그인이 되어 있다면 세션으로 유저의 기본정보와 모든 포스트와 정보를 보내줌
-    const userMain = await users.findOne({
-      attributes: ["id", "email", "username", "nickname", "icon", "userinfo"],
-      where: { id: sess.userid },
-    });
-    res.status(204).json({ userData: userMain, postData: postAll });
+  const userMain = await users.findOne({ where: { id: sess.userid } });
+  const postAll = await posts.findAll();
+  console.log("게시물 없는거란다");
+  console.log(postAll);
+  console.log("로그인 되길 바래");
+  console.log(userMain);
+  if (postAll) {
+    return res.status(201).json(postAll);
+  } else if (userMain) {
+    return res.status(200).json(userMain);
   } else {
-    // 로그인이 안되어 있다면 모든 포스트 정보만 보내줌
-    res.status(200).json(postAll);
+    return res.status(404).send("뭐가문제야!!!!!!!!!!!!!!!세이 썸띵!!!!!!");
   }
 });
 
