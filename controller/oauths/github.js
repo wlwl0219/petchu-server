@@ -46,9 +46,15 @@ module.exports = {
       .then(([user, created]) => {
         // 깃헙 이메일로 이미 회원가입을 했을때
         if (!created) {
-          return res
-            .status(409)
-            .send("너 소셜로 오지말고 일반으로 로그인해 임마");
+          if (user) {
+            sess.userid = user.id;
+            return res.status(200).json({
+              id: user.id,
+              token: token,
+            });
+          } else {
+            return res.status(404).send("fail");
+          }
           // 깃헙 이메일로 회원가입을 새로 하는중
         } else {
           sess.userid = created.id;
