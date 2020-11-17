@@ -4,4 +4,5 @@ module.exports = {
   writeInfo: require("./writeinfo"),
   writeEdit: require("./writeedit"),
   writeList: require("./writelist"),
+  writeAll: require("./writeall"),
 };

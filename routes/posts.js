@@ -14,4 +14,5 @@ router.post('/commentout/:id', commentsController.commentOut.post);
 router.post('/commentup/:id', commentsController.commentUp.post);
 router.put('/commentedit/:id', commentsController.commentEdit.put);
 
+router.get("/writeall", postsController.writeAll.get);
 module.exports = router;
