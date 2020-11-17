@@ -24,7 +24,7 @@ const port = 8001;
  */
 app.use(
   cors({
-    origin: ["http://localhost:8001"],
+    origin: ["http://localhost:3000"],
     methods: ["GET", "POST", "PUT"],
     credentials: true,
   })
@@ -74,19 +74,17 @@ app.use(express.static(__dirname + "/public"));
 //라우터 실행
 app.get("/", async (req, res) => {
   const sess = req.session;
-  const userMain = await users.findOne({ where: { id: sess.userid } });
-  const postAll = await posts.findAll();
-  console.log("게시물 없는거란다");
-  console.log(postAll);
-  console.log("로그인 되길 바래");
-  console.log(userMain);
-  if (postAll) {
-    return res.status(201).json(postAll);
-  } else if (userMain) {
-    return res.status(200).json(userMain);
-  } else {
-    return res.status(404).send("뭐가문제야!!!!!!!!!!!!!!!세이 썸띵!!!!!!");
-  }
+  
+  
+  const userMain = await users.findAll({ where: { email : 'asd' } });
+  //const postAll = await posts.findAll();
+ 
+  
+    if (userMain) {
+      return res.status(200).json(userMain);
+    } else {
+      return res.status(404).send("what");
+    }
 });
 
 app.use("/user", usersRouter);
