@@ -1,6 +1,5 @@
 const express = require("express");
-const { posts, users } = require("./models");
-const path = require("path");
+require("dotenv").config();
 
 //라우터 추가
 const usersRouter = require("./routes/users");
@@ -38,9 +37,15 @@ app.use(
  */
 app.use(
   session({
+    // secret: process.env.SESSION_SECRET,
     secret: "@codestates",
-    resave: false,
-    saveUninitialized: true,
+    resave: true, //false
+    saveUninitialized: true, //false
+    // cookie: {
+    //   secure: true,
+    //   httpOnly: true,
+    //   sameSite: "none",
+    // },
   })
 );
 

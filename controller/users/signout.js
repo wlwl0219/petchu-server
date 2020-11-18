@@ -7,13 +7,13 @@ module.exports = {
     if (sess.userid) {
       req.session.destroy((err) => {
         if (err) {
-          return res.status(500).send("err");
+          return res.status(500).json(err);
         } else {
           return res.status(205).send("Logged out successfully");
         }
       });
     } else {
-      return res.status(404).send('you are currently not logined');
+      return res.status(404).send("you are currently not logined");
     }
   },
 };

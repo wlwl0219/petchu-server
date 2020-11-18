@@ -44,9 +44,10 @@ module.exports = {
           nickname: userResponse.data.login,
         },
       })
-      .then(([result, created]) => {
-        if (created) {
+      .then(([result]) => {
+        if (result) {
           sess.userid = result.dataValues.id;
+          res.redirect("http://localhost:3000/");
         } else {
           res.status(404).send("fail");
         }
