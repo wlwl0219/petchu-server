@@ -25,7 +25,7 @@ const port = 8001;
 app.use(
   cors({
     origin: ["http://localhost:3000"],
-    methods: ["GET", "POST", "PUT"],
+    methods: ["GET", "POST", "OPTION", "PUT", "DELETE"],
     credentials: true,
   })
 );
@@ -70,22 +70,6 @@ app.use(express.static(__dirname + "/public"));
 // app.get("/", function (req, res) {
 //   res.sendFile(path.join(__dirname, "public", "index.html"));
 // });
-
-//라우터 실행
-app.get("/", async (req, res) => {
-  const sess = req.session;
-  
-  
-  const userMain = await users.findAll({ where: { email : 'asd' } });
-  //const postAll = await posts.findAll();
- 
-  
-    if (userMain) {
-      return res.status(200).json(userMain);
-    } else {
-      return res.status(404).send("what");
-    }
-});
 
 app.use("/user", usersRouter);
 app.use("/post", postsRouter);

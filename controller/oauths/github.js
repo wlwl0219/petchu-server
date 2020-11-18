@@ -1,71 +1,55 @@
 require("dotenv").config();
-const axios = require("axios");
 const clientID = process.env.GITHUB_CLIENT_ID;
 const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+const axios = require("axios");
 const { users } = require("../../models");
 
 module.exports = {
   get: async (req, res) => {
-    // 깃헙이 전달해준 code를 받음
-    const { code } = req.body;
-    // 다시 깃헙에게 아이디, 비번, code를 담아 post로 보낸다.
-    const response = await axios.post(
-      "https://github.com/login/oauth/access_token",
-      {
-        code,
-        clientID,
-        clientSecret,
-      },
-      {
-        headers: {
-          accept: "application/json",
-        },
-      }
-    );
+    const sess = req.session;
+    const { code } = req.query;
+    console.info("==== session ====requestCode====");
+    console.log(sess);
+    console.log(code);
 
-    // 토큰으로 유저정보 가지고 오기
-    const token = response.data.access_token;
-    const { data } = await axios.get("https://api.github.com/user", {
+    const url = `https://github.com/login/oauth/access_token?client_id=${clientID}&client_secret=${clientSecret}&code=${code}`;
+    const response = await axios({
+      method: "POST",
+      url: url,
+      headers: {
+        "content-type": "application/json",
+        "access-control-allow-origin": "*",
+      },
+    });
+    console.log(`response.data:${response.data}`);
+    console.info("==== 확인확인 ====");
+
+    let token = response.data.split("&")[0].split("=")[1];
+
+    const userResponse = await axios({
+      method: "GET",
+      url: "https://api.github.com/user",
       headers: {
         Authorization: `token ${token}`,
       },
     });
-
-    // 그 유저 정보로 디비에 저장
-    const sess = req.session;
+    console.log("유저정보!!!!!!!:", userResponse.data);
     users
       .findOrCreate({
-        where: {
-          email: data.email,
-        },
+        where: { id: userResponse.data.id },
         defaults: {
-          username: data.name,
-          nickname: data.login,
+          email: userResponse.data.email,
+          password: userResponse.data.node_id,
+          username: userResponse.data.name,
+          nickname: userResponse.data.login,
         },
       })
-      .then(([user, created]) => {
-        // 깃헙 이메일로 이미 회원가입을 했을때
-        if (!created) {
-          if (user) {
-            sess.userid = user.id;
-            return res.status(200).json({
-              id: user.id,
-              token: token,
-            });
-          } else {
-            return res.status(404).send("fail");
-          }
-          // 깃헙 이메일로 회원가입을 새로 하는중
+      .then(([result, created]) => {
+        if (created) {
+          sess.userid = result.dataValues.id;
         } else {
-          sess.userid = created.id;
-          return res.status(201).json({
-            id: created.id,
-            token: token,
-          });
+          res.status(404).send("fail");
         }
-      })
-      .catch((err) => {
-        res.status(500).send(err);
       });
   },
 };
