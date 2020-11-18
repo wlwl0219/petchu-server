@@ -2,28 +2,23 @@ const { users } = require("../../models");
 
 module.exports = {
   put: async (req, res) => {
-    const { email, nickname, username, petinfo, socialinfo } = req.body;
+    const { email, nickname, petinfo, socialinfo } = req.body;
+    console.log(req.body);
     const sess = req.session;
     if (sess.userid) {
       const userEdit = await users.update(
         {
-          email: email,
-          username: username,
           nickname: nickname,
           petinfo: petinfo,
           socialinfo: socialinfo,
         },
         {
           where: {
-            id: sess.userid,
+            email: email,
           },
         }
       );
       if (userEdit) {
-        console.log("확인확인");
-        console.table(userEdit);
-        console.log(userEdit.id);
-        console.log("여기까지가 끝인가보오");
         res.status(200).json(userEdit);
       } else {
         return res
