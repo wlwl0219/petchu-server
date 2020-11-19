@@ -6,6 +6,19 @@ const usersRouter = require("./routes/users");
 const postsRouter = require("./routes/posts");
 const oauthsRouter = require("./routes/oauths");
 
+// 버전 일때만 활성화
+const mySqlStore = require("express-mysql-session")(session);
+const options = {
+  user: "petchu",
+  password: "petchu123",
+  database: "petchu_db",
+  host: "database-petchu.ctuzxrmfidqa.ap-northeast-2.rds.amazonaws.com",
+  dialect: "mysql",
+  port: 3306,
+};
+const conn = mysql.createConnection(options);
+conn.connect();
+
 //미들웨어 추가
 const cors = require("cors");
 const session = require("express-session");
@@ -23,7 +36,7 @@ const port = 8001;
  */
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://petchuclient.s3-website.ap-northeast-2.amazonaws.com"],
     methods: ["GET", "POST", "OPTION", "PUT", "DELETE"],
     credentials: true,
   })
@@ -35,17 +48,28 @@ app.use(
  * resave - session을 언제나 저장할지 정하는 값
  * saveUninitialize: true - 세션이 저장되기 전에 uninitialized 상태로 만들어 저장
  */
+// app.use(
+//   session({
+//     // secret: process.env.SESSION_SECRET,
+//     secret: "@codestates",
+//     resave: true, //false
+//     saveUninitialized: true, //false
+//   })
+// );
+
+// 버전 일때만 활성화
 app.use(
   session({
-    // secret: process.env.SESSION_SECRET,
-    secret: "@codestates",
-    resave: true, //false
-    saveUninitialized: true, //false
-    // cookie: {
-    //   secure: true,
-    //   httpOnly: true,
-    //   sameSite: "none",
-    // },
+    secret: "codestates",
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      secure: true,
+      httpOnly: true,
+      maxAge: 60 * 60 * 24 * 1000,
+      sameSite: "none",
+    },
+    store: new mySqlStore(options),
   })
 );
 
