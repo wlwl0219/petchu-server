@@ -3,7 +3,8 @@ const { users } = require("../../models");
 module.exports = {
   get: (req, res) => {
     const sess = req.session;
-
+    console.info("==== 세션받는중 ====");
+    console.log(sess.userid);
     if (sess.userid) {
       users
         .findOne({
