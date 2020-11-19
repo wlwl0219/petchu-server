@@ -2,10 +2,19 @@ const { users } = require("../../models");
 
 module.exports = {
   put: async (req, res) => {
-    const { email, nickname, petinfo, socialinfo } = req.body;
+    const { email, nickname, petinfo, socialinfo, password } = req.body;
     console.log(req.body);
-    const sess = req.session;
-    if (sess.userid) {
+
+    const userCheck = await users.findOne({
+      where: {
+        email: email,
+        password: password,
+      },
+    });
+
+    if (userCheck === null) {
+      return res.status(404).send("비밀번호가 올바르지 않습니다");
+    } else {
       const userEdit = await users.update(
         {
           nickname: nickname,
@@ -22,11 +31,9 @@ module.exports = {
         res.status(200).json(userEdit);
       } else {
         return res
-          .status(204)
+          .status(404)
           .send("데이터베이스에 회원정보를 업데이트 하지 못했습니다.");
       }
-    } else {
-      return res.status(401).send("존재하지 않은 유저입니다.");
     }
   },
 };
