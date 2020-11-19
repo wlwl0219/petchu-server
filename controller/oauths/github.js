@@ -47,7 +47,9 @@ module.exports = {
       .then(([result]) => {
         if (result) {
           sess.userid = result.dataValues.id;
-          res.redirect("http://localhost:3000/");
+          res.redirect(
+            "http://petchuclient.s3-website.ap-northeast-2.amazonaws.com"
+          );
         } else {
           res.status(404).send("fail");
         }
