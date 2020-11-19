@@ -35,25 +35,16 @@ app.use(
  * resave - session을 언제나 저장할지 정하는 값
  * saveUninitialize: true - 세션이 저장되기 전에 uninitialized 상태로 만들어 저장
  */
-// app.use(
-//   session({
-//     secret: process.env.SESSION_SECRET,
-//     resave: true, //false
-//     saveUninitialized: true, //false
-//   })
-// );
 
-// 버전 일때만 활성화
+// http버전
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
     cookie: {
-      secure: true,
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 1000,
-      sameSite: "none",
     },
   })
 );
