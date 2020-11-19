@@ -6,19 +6,6 @@ const usersRouter = require("./routes/users");
 const postsRouter = require("./routes/posts");
 const oauthsRouter = require("./routes/oauths");
 
-// 버전 일때만 활성화
-const mySqlStore = require("express-mysql-session")(session);
-const options = {
-  user: "petchu",
-  password: "petchu123",
-  database: "petchu_db",
-  host: "database-petchu.ctuzxrmfidqa.ap-northeast-2.rds.amazonaws.com",
-  dialect: "mysql",
-  port: 3306,
-};
-const conn = mysql.createConnection(options);
-conn.connect();
-
 //미들웨어 추가
 const cors = require("cors");
 const session = require("express-session");
@@ -50,8 +37,7 @@ app.use(
  */
 // app.use(
 //   session({
-//     // secret: process.env.SESSION_SECRET,
-//     secret: "@codestates",
+//     secret: process.env.SESSION_SECRET,
 //     resave: true, //false
 //     saveUninitialized: true, //false
 //   })
@@ -60,7 +46,7 @@ app.use(
 // 버전 일때만 활성화
 app.use(
   session({
-    secret: "codestates",
+    secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
     cookie: {
@@ -69,7 +55,6 @@ app.use(
       maxAge: 60 * 60 * 24 * 1000,
       sameSite: "none",
     },
-    store: new mySqlStore(options),
   })
 );
 
@@ -95,10 +80,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 //클라이언트랑 연결
-app.use(express.static(__dirname + "/public"));
-// app.get("/", function (req, res) {
-//   res.sendFile(path.join(__dirname, "public", "index.html"));
-// });
+// app.use(express.static(__dirname + "/public"));
 
 app.use("/user", usersRouter);
 app.use("/post", postsRouter);
