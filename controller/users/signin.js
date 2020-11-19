@@ -15,7 +15,9 @@ module.exports = {
         if (result === null) {
           return res.status(404).send("invalid user");
         } else {
-          sess.userid = result.id;
+          sess.userid = result.dataValues.id;
+          console.info("==== 세션주는중 ====");
+          console.log(sess.userid);
           return res.status(200).json(result);
           // return res.status(200).json({
           //   id: result.id,

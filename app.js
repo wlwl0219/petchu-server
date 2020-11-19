@@ -23,6 +23,7 @@ const port = 8001;
  */
 app.use(
   cors({
+    // origin: true,
     origin: ["http://petchuclient.s3-website.ap-northeast-2.amazonaws.com"],
     methods: ["GET", "POST", "OPTION", "PUT", "DELETE"],
     credentials: true,
@@ -40,14 +41,25 @@ app.use(
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
-    resave: true,
+    resave: true, // false
     saveUninitialized: true,
-    cookie: {
-      httpOnly: true,
-      maxAge: 60 * 60 * 24 * 1000,
-    },
   })
 );
+
+// https버전
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET,
+//     resave: true, // false
+//     saveUninitialized: true,
+//     cookie: {
+//       secure: true,
+//       httpOnly: true,
+//       maxAge: 60 * 60 * 24 * 1000,
+//       sameSite: "none",
+//     },
+//   })
+// );
 
 /*
  * cookieParser() - 넘어온 Cookie 데이터를 관리하기 쉽게 JSON 객체로 변환해 주는 라이브러리

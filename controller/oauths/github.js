@@ -8,8 +8,8 @@ module.exports = {
   get: async (req, res) => {
     const sess = req.session;
     const { code } = req.query;
-    console.info("==== session ====requestCode====");
-    console.log(sess);
+
+    console.info("==== 깃헙의 code ====");
     console.log(code);
 
     const url = `https://github.com/login/oauth/access_token?client_id=${clientID}&client_secret=${clientSecret}&code=${code}`;
@@ -21,11 +21,11 @@ module.exports = {
         "access-control-allow-origin": "*",
       },
     });
+
+    console.info("==== 깃헙의 토큰 ====");
     console.log(`response.data:${response.data}`);
-    console.info("==== 확인확인 ====");
 
     let token = response.data.split("&")[0].split("=")[1];
-
     const userResponse = await axios({
       method: "GET",
       url: "https://api.github.com/user",
@@ -33,7 +33,8 @@ module.exports = {
         Authorization: `token ${token}`,
       },
     });
-    console.log("유저정보!!!!!!!:", userResponse.data);
+    console.info("==== 깃헙의 유저 ====");
+    console.log(userResponse.data);
     users
       .findOrCreate({
         where: { id: userResponse.data.id },
@@ -47,6 +48,8 @@ module.exports = {
       .then(([result]) => {
         if (result) {
           sess.userid = result.dataValues.id;
+          console.info("==== 세션주는중 ====");
+          console.log(sess.userid);
           res.redirect(
             "http://petchuclient.s3-website.ap-northeast-2.amazonaws.com"
           );
