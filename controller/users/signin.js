@@ -17,6 +17,7 @@ module.exports = {
         } else {
           sess.userid = result.dataValues.id;
           console.info("==== 세션주는중 ====");
+          console.log(sess);
           console.log(sess.userid);
           return res.status(200).json(result);
           // return res.status(200).json({

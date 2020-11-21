@@ -49,6 +49,7 @@ module.exports = {
         if (result) {
           sess.userid = result.dataValues.id;
           console.info("==== 세션주는중 ====");
+          console.log(sess);
           console.log(sess.userid);
           res.redirect(
             "http://petchuclient.s3-website.ap-northeast-2.amazonaws.com"
